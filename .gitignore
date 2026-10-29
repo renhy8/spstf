@@ -11,3 +11,7 @@ __pycache__/
 
 # matplotlib 配置缓存
 .mplconfig/
+
+# 非代码资料（不上传，只保留代码）
+与ai聊天记录.txt
+TransMUSIC_*/
