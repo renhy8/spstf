@@ -1,0 +1,13 @@
+# 大数据文件（不上传 GitHub）
+*.h5
+*.pt
+*.pth
+*.zip
+
+# Python 缓存
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# matplotlib 配置缓存
+.mplconfig/
