@@ -72,3 +72,30 @@ def save_model_run(net, config, train_loss_list, val_loss_list,
 
     print("模型已保存到:", save_dir)
     return save_dir
+
+def load_model_for_retrain(model_class, model_file, lr, device):
+    """从保存的检查点加载模型用于继续训练，返回 (net, loss, updater)。
+
+    参数:
+        model_class: 网络类（例如 TransformerDOA），用于按保存时的配置重建结构
+        model_file: 检查点文件夹路径（内含 model.pt），例如 "weights\\spstfv0_20261030_1110"
+        lr: 继续训练的学习率
+        device: torch 设备
+
+    返回:
+        (net, loss, updater)：已装入权重的网络、RMSPE 损失、Adam 优化器
+    """
+    from src.criterions import RMSPELoss
+    checkpoint = torch.load(os.path.join(model_file, "model.pt"), map_location=device)
+    config = checkpoint["config"]
+    net = model_class(N=config["N"], T=config["T"], M=config["M"],
+                      num_hiddens=config["num_hiddens"],
+                      num_heads=config["num_heads"],
+                      ffn_num_hiddens=config["ffn_num_hiddens"],
+                      num_layers=config["num_layers"],
+                      dropout=config["dropout"])
+    net.load_state_dict(checkpoint["state_dict"])
+    net.to(device)
+    loss = RMSPELoss()
+    updater = torch.optim.Adam(net.parameters(), lr=lr)
+    return net, loss, updater
