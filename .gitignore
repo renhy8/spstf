@@ -16,3 +16,6 @@ __pycache__/
 与ai聊天记录.txt
 TransMUSIC_*/
 spstransformer/weights/
+
+# 恢复用的历史版本备份
+backups/
